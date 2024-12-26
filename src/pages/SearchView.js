@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const listTitles = {
   display: 'grid',
   justifyContent: 'space-evenly',
-  gridTemplateColumns: '100px 100px 100px 100px 100px 150px',
+  gridTemplateColumns: '100px 100px 100px 100px 100px 250px',
   alignItems: 'center',
   textAlign: 'center',
   margin: "10px",
@@ -16,7 +16,7 @@ const listTitles = {
 const consignerList = {
   display: 'grid',
   justifyContent: 'space-evenly',
-  gridTemplateColumns: '100px 100px 100px 100px 100px 150px',
+  gridTemplateColumns: '100px 100px 100px 100px 100px 250px',
   alignItems: 'center',
   textAlign: 'center',
   margin: '10px',
@@ -39,6 +39,18 @@ function displayDonate(donate) {
     return <h3 style={{ color: "red" }}>Take back</h3>
   }
 }
+
+  function tookNothing(arg) {
+    if (arg === true) {
+      return <div style={{color: "red", marginRight: "5px"}}>Took Nothing</div>
+    }
+  }
+
+  function displayBuyout(arg) {
+    if (arg.is_buyout === true) {
+      return <div style={{color: "red"}}>Buyout: {arg.buyout_amount}</div>
+    }
+  }
 
 function formatTimestamp(timestamp) {
   const dateObj = new Date(timestamp);
@@ -142,6 +154,8 @@ export default function SearchView() {
               <h3>{ex.bags}</h3>
               {displayDonate(ex.is_donate)}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {tookNothing(ex.took_nothing)}
+                {displayBuyout(ex)}
                 <Input
                   color="primary"
                   value={currentNumberValue}

@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 const listTitles = {
   display: 'grid',
   justifyContent: 'space-evenly',
-  gridTemplateColumns: '100px 100px 100px 100px 100px 150px',
+  gridTemplateColumns: '100px 100px 100px 100px 100px 250px',
   alignItems: 'center',
   textAlign: 'center',
   margin: "10px",
@@ -19,7 +19,7 @@ const listTitles = {
 const consignerList = {
   display: 'grid',
   justifyContent: 'space-evenly',
-  gridTemplateColumns: '100px 100px 100px 100px 100px 150px',
+  gridTemplateColumns: '100px 100px 100px 100px 100px 250px',
   alignItems: 'center',
   textAlign: 'center',
   margin: '10px',
@@ -73,6 +73,7 @@ export default function DateView() {
     const response = await fetch(`http://localhost:8080/consigners/bydate/${date}`);
     const data = await response.json();
     setConsigners(data);
+    console.log(data)
   }
 
   // Update consigner's number (same logic as in Home)
@@ -90,6 +91,18 @@ export default function DateView() {
       delete newState[id];
       return newState;
     });
+  }
+
+  function tookNothing(arg) {
+    if (arg === true) {
+      return <div style={{color: "red", marginRight: "5px"}}>Took Nothing</div>
+    }
+  }
+
+  function displayBuyout(arg) {
+    if (arg.is_buyout === true) {
+      return <div style={{color: "red"}}>Buyout: {arg.buyout_amount}</div>
+    }
   }
 
   // Filter consigners by search query
@@ -148,7 +161,7 @@ export default function DateView() {
         <h2>Name</h2>
         <h2>Phone</h2>
         <h2>Bags</h2>
-        <h2>Donate?</h2>
+        <h2>Donate</h2>
         <h2>Number</h2>
       </div>
 
@@ -163,6 +176,8 @@ export default function DateView() {
               <h3>{ex.bags}</h3>
               {displayDonate(ex.is_donate)}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {tookNothing(ex.took_nothing)}
+                {displayBuyout(ex)} 
                 <Input
                   color="primary"
                   value={currentNumberValue}
