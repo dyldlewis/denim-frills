@@ -311,6 +311,15 @@ export default function Home() {
     ex.phone.includes(searchQuery)
   );
 
+  function totalBuyout(todaysConsigners) {
+    var total = 0;
+    for (var i = 0; i < todaysConsigners.length; i++) {
+      total += todaysConsigners[i].buyout_amount
+    }
+    return total
+  }
+
+
   return (
     <div>
       {/* Banner with Navigation */}
@@ -401,16 +410,19 @@ export default function Home() {
       </div>
 
       {/* Search Input */}
+
+      {/* Daily Consigner Count */}
+      <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
       <Input
         color="primary"
         variant="outlined"
         placeholder="Search by Name or Phone"
-        style={{ width: "400px", height: "40px", marginLeft: "10px", marginBottom: "10px" }}
+        style={{ width: "400px", height: "40px", marginLeft: "10px" }}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
-
-      {/* Daily Consigner Count */}
-      <div style={{ margin: "10px", color: "blue" }}>Consigners today: {filteredConsigners.length}</div>
+        <div style={{ margin: "10px", color: "blue" }}>Consigners today: {filteredConsigners.length}</div>
+        <div style={{ margin: "10px", color: "green" }}>Buyouts total: ${totalBuyout(todaysConsigners)}</div>
+      </div>
 
       {/* Consigners List */}
       <div>
@@ -532,7 +544,7 @@ export default function Home() {
                       size="lg"
                       variant="outlined"
                     />
-                    <span style={{textAlign: "left"}}>Took Nothing</span>
+                    <span style={{ textAlign: "left" }}>Took Nothing</span>
                   </div>
                 )}
 
