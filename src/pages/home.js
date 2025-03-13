@@ -160,7 +160,72 @@ export default function Home() {
       console.error('Error adding consigner:', error);
     }
   }
+  function printConsigner(consigner) {
+    console.log(consigner)
+    var isNew = "false"
+    var isDonate = "false"
+    
+    if (consigner.is_new === true) {
+      isNew = "true"   
+    }
 
+    if (consigner.is_donate === true) {
+      isDonate = "true"
+    } 
+    // Create a small print window
+    const printWindow = window.open('', '', 'width=600,height=800');
+    if (!printWindow) return; // If popup is blocked, just return
+
+    // Write minimal HTML for the tag
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Consigner Tag</title>
+          <style>
+            /* Styles to make the tag smaller */
+            body {
+              margin: 0;
+              padding: 10px;
+              font-family: sans-serif;
+              font-size: 14px;
+            }
+            .tag {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+              padding: 10px;
+              width: 200px;
+              margin: auto;
+              text-align: left;
+            }
+            .tag p {
+              margin: 4px 0;
+            }
+            @media print {
+              /* This hides the default browser header/footer if allowed by the browser */
+              @page { margin: 0; }
+              body { margin: 0; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="tag">
+            <p><strong>Name:</strong> ${consigner.name}</p>
+            <p><strong>Phone:</strong> ${consigner.phone}</p>
+            <p><strong>New?: ${isNew}</p>
+            <p><strong>Donate?: ${isDonate}</p>
+          </div>
+          <script>
+  setTimeout(() => {
+    window.print();
+  }, 100); 
+
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  }
   // Update Consigner
   async function updateConsigner(id, fields) {
     try {
@@ -413,13 +478,13 @@ export default function Home() {
 
       {/* Daily Consigner Count */}
       <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
-      <Input
-        color="primary"
-        variant="outlined"
-        placeholder="Search by Name or Phone"
-        style={{ width: "400px", height: "40px", marginLeft: "10px" }}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
+        <Input
+          color="primary"
+          variant="outlined"
+          placeholder="Search by Name or Phone"
+          style={{ width: "400px", height: "40px", marginLeft: "10px" }}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
         <div style={{ margin: "10px", color: "blue" }}>Consigners today: {filteredConsigners.length}</div>
         <div style={{ margin: "10px", color: "green" }}>Buyouts total: ${totalBuyout(todaysConsigners)}</div>
       </div>
@@ -466,6 +531,13 @@ export default function Home() {
                     Edit
                   </Button>
                 )}
+                <Button
+                  variant="soft"
+                  onClick={() => printConsigner(ex)}
+                  style={{ marginLeft: "10px", marginTop: "10px"}}
+                >
+                  Print
+                </Button>
               </div>
 
               {/* Time */}
